@@ -9,6 +9,12 @@ git clone https://github.com/geniv/nette-module-gallery.git app/modules/GalleryM
 ```
 must by install db from sql files
 
+SQL order install
+-----------------
+1) prefix_gallery.sql
+2) prefix_gallery_item.sql
+3) prefix_gallery_item_has_locale.sql
+4) prefix_gallery_has_locale.sql
 
 Include in application
 ----------------------
