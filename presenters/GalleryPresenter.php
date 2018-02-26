@@ -32,7 +32,7 @@ class GalleryPresenter extends ModulesBasePresenter
      */
     public function renderDefault()
     {
-        $this['breadCrumb']->addLink('breadcrumb-gallery', null, 'fa fa-picture-o');
+        $this['breadCrumb']->addLink('breadcrumb-gallery', [], 'fa fa-picture-o');
 
         $this->template->gallery = $this->galleryModel->getList();
 
@@ -55,11 +55,11 @@ class GalleryPresenter extends ModulesBasePresenter
      */
     public function renderDetail($id)
     {
-        $this['breadCrumb']->addLink('breadcrumb-gallery', '//:Gallery:', 'fa fa-picture-o');
+        $this['breadCrumb']->addLink('breadcrumb-gallery', ['//:Gallery:'], 'fa fa-picture-o');
 
         $detail = $this->galleryModel->getDetail($id);
         if ($detail) {
-            $this['breadCrumb']->addLink('breadcrumb-gallery-' . Strings::webalize($detail->name), null, 'fa fa-picture-o');
+            $this['breadCrumb']->addLink('breadcrumb-gallery-' . Strings::webalize($detail['name']), [], 'fa fa-picture-o');
 
             $this->template->detail = $detail;
             $this->template->items = $this->galleryModel->getListItems($id);
