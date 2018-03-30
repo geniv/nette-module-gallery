@@ -64,13 +64,9 @@ class Gallery
      */
     public function getList(): Fluent
     {
-        return $this->connection->select('g.id,' .
-            'IFNULL(lo_ghl.name, ghl.name) name,' .
-            'IFNULL(lo_ghl.description, ghl.description) description,' .
-            'g.added, g.visible, g.visible_on_homepage')
+        return $this->connection->select('g.id, ghl.name, ghl.description, g.added, g.visible, g.visible_on_homepage')
             ->from($this->tableGallery)->as('g')
-            ->leftJoin($this->tableGalleryHasLocale)->as('ghl')->on('ghl.id_gallery=g.id')->and('ghl.id_locale IS NULL')
-            ->leftJoin($this->tableGalleryHasLocale)->as('lo_ghl')->on('lo_ghl.id_gallery=g.id')->and('lo_ghl.id_locale=%i', $this->idLocale)
+            ->leftJoin($this->tableGalleryHasLocale)->as('ghl')->on('ghl.id_gallery=g.id')->and(['ghl.id_locale' => $this->idLocale])
             ->where(['g.visible' => true])
             ->orderBy('g.position')->asc();
     }
@@ -84,10 +80,9 @@ class Gallery
     public function getListWithFirstItem(): Fluent
     {
         return $this->getList()
-            ->select('gi.image, IFNULL(lo_gihl.title, gihl.title) title')
+            ->select('gi.image, gihl.title')
             ->join($this->tableGalleryItem)->as('gi')->on('gi.id_gallery=g.id')->and('gi.visible=%i', true)
-            ->leftJoin($this->tableGalleryItemHasLocale)->as('gihl')->on('gihl.id_gallery_item=gi.id')->and('gihl.id_locale IS NULL')
-            ->leftJoin($this->tableGalleryItemHasLocale)->as('lo_gihl')->on('lo_gihl.id_gallery_item=gi.id')->and('lo_gihl.id_locale=%i', $this->idLocale)
+            ->leftJoin($this->tableGalleryItemHasLocale)->as('gihl')->on('gihl.id_gallery_item=gi.id')->and(['gihl.id_locale' => $this->idLocale])
             ->groupBy('g.id');
     }
 
@@ -113,12 +108,9 @@ class Gallery
      */
     private function getItems(): Fluent
     {
-        return $this->connection->select('gi.id,' .
-            'IFNULL(lo_gihl.title, gihl.title) title,' .
-            'gi.image, gi.added, gi.visible, gi.visible_on_homepage')
+        return $this->connection->select('gi.id, gihl.title, gi.image, gi.added, gi.visible, gi.visible_on_homepage')
             ->from($this->tableGalleryItem)->as('gi')
-            ->leftJoin($this->tableGalleryItemHasLocale)->as('gihl')->on('gihl.id_gallery_item=gi.id')->and('gihl.id_locale IS NULL')
-            ->leftJoin($this->tableGalleryItemHasLocale)->as('lo_gihl')->on('lo_gihl.id_gallery_item=gi.id')->and('lo_gihl.id_locale=%i', $this->idLocale);
+            ->leftJoin($this->tableGalleryItemHasLocale)->as('gihl')->on('gihl.id_gallery_item=gi.id')->and(['gihl.id_locale' => $this->idLocale]);
     }
 
 
